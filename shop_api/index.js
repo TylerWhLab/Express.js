@@ -19,6 +19,7 @@ const cookieParser = require('cookie-parser');
 // 쿠키 파서 사용할 수 있도록 설정, () 빠지면 아무 메시지 없이 서버 응답 없음
 app.use(cookieParser());
 
+// DB 연결 정보가 담긴 파일
 const config = require('./config/key');
 
 // 몽고DB 연결
@@ -42,14 +43,16 @@ if (process.env.NODE_ENV === "production") {
   // React.js 빌드 경로 static 설정
   app.use(express.static("shop_frontend/build"));
 
-  // index.html for all page routes    html or routing and naviagtion
+  // 운영 서버에서는 build된 React App에 접근하도록 설정
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../shop_frontend", "build", "index.html"));
   });
 }
 
-const port = process.env.PORT || 5555 // 백엔드 포트 지정
+// 백엔드 포트 지정
+const port = process.env.PORT || 5555
 
+// Express App 구동
 app.listen(port, () => {
   console.log(`Server Listening on ${port}`)
 });
