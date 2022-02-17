@@ -84,7 +84,7 @@ userSchema.pre('save', function(next) {
 userSchema.methods.comparePw = function(plainPw, callback) {
 
     // pw 비교 함수, 콜백으로 match 여부 반환
-    bcrypt.compare(plainPw, this.password, function(err, isMatch) {
+    bcrypt.compare(plainPw, this.password, function(err, isMatch) { // pw 비교 결과가 isMatch에 담겨 나온다.
         if(err) return callback(err)
         callback(null, isMatch) // 에러 없고, 비밀번호 같다.
     })

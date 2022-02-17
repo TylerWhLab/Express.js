@@ -11,11 +11,14 @@ const async = require('async');
 //             User
 //=================================
 
-router.get("/auth", auth, (req, res) => { // auth라는 미들웨어 : request를 받고, callback 실행 이전에 수행할 작업
+// 인증
+router.get("/auth", auth, (req, res) => {
+    // auth라는 미들웨어 : request를 받고, callback 실행 이전에 수행할 작업을 구현
     
     // auth에 성공해야만 이후 코드가 실행됨
     console.log("auth 성공");
 
+    // http 상태 코드 200과 아래 data 응답
     res.status(200).json({
         _id: req.user._id, // auth.js에서 req에 user를 담았기 때문에 이렇게 사용
         isAdmin: req.user.role === 0 ? false : true,
@@ -97,15 +100,18 @@ router.post("/login", (req, res) => {
 });
 
 
-// logout : token 삭제
-router.get("/logout", auth, (req, res) => { // 로그인 된 상태에서 로그아웃 해야하기 때문에 auth middleware 사용
+// 로그아웃 : token 삭제
+router.get("/logout", auth, (req, res) => {
+    // 로그인 된 상태에서 로그아웃 해야하기 때문에 auth middleware 사용
+
     User.findOneAndUpdate(
-        { _id: req.user._id }, // auth middleware에서 req 에 user를 넣어줌
+        { _id: req.user._id }, // auth middleware에서 req에 user를 넣어줌
         { token: "", tokenExp: "" }, 
         (err, doc) => {
             if (err) return res.json({ success: false, err });
             return res.status(200).send({ success: true });
     });
+
 });
 
 
